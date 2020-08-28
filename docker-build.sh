@@ -22,11 +22,17 @@ while [[ $# -gt 0 ]]; do
 done
 set +u
 
+### Container vars ###
+UNSET_HTTP_HEADER='Accept-Encoding:' ##, User-Agent, Cookie'
+SET_HTTP_HEADER='User-Agent: "TechTest"' ## Host: "​www.which.co.uk"'
+
+
 # Remove any existing container, forcefully
 docker rm -f "$CONTAINER_NAME"
 
 # Build the new version
-docker build -t "$CONTAINER_NAME" --build-arg REFRESH_TIME="$REFRESH" .
+docker build -t "$CONTAINER_NAME" --build-arg REFRESH_TIME="$REFRESH" \
+  --build-arg UNSET_HEADER="$UNSET_HTTP_HEADER" --build-arg SET_HEADER="$SET_HTTP_HEADER" .
 
 # Run container in the background
 docker run -d --name "$CONTAINER_NAME" -p 8080:80 "$CONTAINER_NAME"
