@@ -10,17 +10,34 @@
 ### Set environment vars ###
 CONTAINER_NAME="docker-proxy"
 
+### Args ###
+REFRESH=9
+set -u
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -r) shift; REFRESH=$1 ;;
+    -h | '--help' | *) echo -e "\n There's only one optional ARG accepted: -r nn where nn is a integer\n"; exit 1 ;;
+  esac
+  shift
+done
+set +u
+
 # Remove any existing container, forcefully
 docker rm -f "$CONTAINER_NAME"
 
 # Build the new version
-docker build -t "$CONTAINER_NAME" .
+docker build -t "$CONTAINER_NAME" --build-arg REFRESH_TIME="$REFRESH" .
 
 # Run container in the background
 docker run -d --name "$CONTAINER_NAME" -p 8080:80 "$CONTAINER_NAME"
 
 # Foreground run for debugging
 # docker run --rm --name "$CONTAINER_NAME" -p 8080:80 "$CONTAINER_NAME"
+
+# Wait two secs for it to start & then check
+# read -t 1; clear; curl --proxy 192.168.43.111:8080 -L http://www.which.co.uk
+read -r -t 1; clear; curl --proxy localhost:8080 -L http://www.which.co.uk
+read -r -t 1
 
 # Display the logs
 docker logs -f "$CONTAINER_NAME"
