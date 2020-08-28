@@ -1,20 +1,37 @@
-</head>
-  
-<body>
-  
-  <h1>It works!</h1>
-  
-  <p id="location"></p>
-  
-  <script>
-    document.getElementById("location").innerHTML = 
-    "Location of this page: " + window.location.href;
-  </script>
 
-  <ul>
-    <li><a href="/">home</a></li>
-    <li><a href="/status/index.html">status</a></li>
-  </ul>
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="utf-8" />
+    <title>Docker Proxy Setup</title>
+  </head>
+  
+  <body>
+    
+    <h1>It works!</h1>
+    
+    <p id="location"></p>
+    
+    <script>
+      document.getElementById("location").innerHTML = 
+      "Location of this page: " + window.location.href;
+    </script>
 
-</body>
+    <ul>
+      <li><a href="/">home</a></li>
+      <li><a href="/status/index.html">status</a></li>
+      <li><a href="/server-status?refresh=INT">localhost server-status</a></li>
+      <li><a href="/server-info">localhost server-info</a></li>
+    </ul>
+
+    <script type="text/javascript">
+      function myFunction () {
+        console.log('Executed every 10 secs!');
+      }
+      
+      var interval = setInterval(function () { myFunction(); }, 10000);
+    </script>
+
+  </body>
 </html>
